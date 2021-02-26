@@ -1,0 +1,66 @@
+isnumber(zero).%
+isnumber(s(X)) :- isnumber(X).
+%isnumber(s(s(zero))) to 2 bo ka¿de s = X+1
+% x+1 jest liczba jesli X jest zerem
+isequal(X,X) :- isnumber(X).%X=X if Xiszero
+isequal(s(X), s(Y)) :- isequal(X,Y).% X+1 i Y+1 is equal if X,Y are zero
+%isequal(s(zero),zero).
+
+lessthanequal(zero,X).%zero is lessthanequal X
+lessthanequal(s(X), s(Y)) :- lessthanequal(X, Y).%X+1 is lessthan equalY+1 if X is zero and Y is zero
+%lessthanequal(zero,s(zero)).
+
+lessthan(zero,s(X)).%0 is lessthan 0+1
+lessthan(s(X), s(Y)) :- lessthan(X, Y).%s(X) is less than s(Y) if X is zero and Y=zer0 +1
+%lessthan(zero,s(zero)).
+
+
+add(zero, X, X) :- isnumber(X).%0+x=x (first+second =third)
+add(s(X), Y, s(Z)) :- add(X,Y,Z).%x+y=z to x+1+y = z+1
+%add(zero,s(zero),X).
+
+even(zero).% zero is even
+even(s(s(X))) :- even(X).% x+1+1 if x=0
+odd(s(X)) :- even(X).
+
+times(zero, X, zero) :- isnumber(X).% 0*X = 0
+times(s(X), Y, Z) :- times(X, Y, W),add(Y, W, Z).% (X+1)*Y =z x*y=w (y+w=z)
+%times(s(s(zero)),s(s(zero)),X).
+
+% quotient(X,Y,Q) to be true if X/Y = Q (in integer arithmetic)
+quotient(X, Y, zero) :- isnumber(X),lessthan(X,Y),isequal(X,zero).
+quotient(X, Y, s(Z)) :- add(Y, W, X),quotient(W, Y, Z).%x/y=z+1 y+w=x w/y=z
+% quotient(s(zero),s(zero),X).
+% quotient(s(zero),s(zero), s(zero)).
+
+fibo(zero, X) :- isequal(X, s(zero)).
+fibo(s(zero), X) :- isequal(X, s(zero)).
+fibo(s(s(N)), X) :- fibo(N, Y), fibo(s(N), Z), add(Y,Z,X).
+%fibo(X,s(s(zero))).
+
+shownumber(zero, 0).
+shownumber(s(X), N) :- shownumber(X, M), N is M + 1.
+%shownum(s(zero),X).
+
+
+ack(zero,zero,s(zero)).
+ack(zero,N,s(N)).
+ack(s(M),zero,X):-ack(M,s(zero),X).
+ack(s(M),s(N),X):-ack(M,Y,X),ack(s(M),N,Y).
+%ack(s(zero),s(zero),X).
+
+
+%x/y=q
+%(x+1)/y=q+1
+remainder(X,Y,Z):-isnumber(X),lessthan(X,Y),isequal(X,Z).
+remainder(s(X),Y,Z):-plus(Y,W,s(X)),remainder(W,Y,Z).
+
+
+
+
+%X=N!
+%X=1*2*3*..*N
+%(x+1)!=y : x! = Z i (x+1)*Z=Y;
+fact(zero,s(zero)).
+fact(s(X), Y) :- fact(X, Z),times(s(X), Z, Y).
+%fact(s(zero),s(zero)).

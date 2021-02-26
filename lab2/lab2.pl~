@@ -1,0 +1,42 @@
+parent(pam,bob).%pam is parent of bob
+parent(tom,bob).
+parent(tom,liz).
+parent(bob,ann).
+parent(bob,pat).
+parent(joe,jim).
+parent(pat,jim).
+female(pam).
+male(tom).
+male(bob).
+female(liz).
+female(ann).
+female(pat).
+male(joe).
+male(jim).
+
+child(X,Y) :- parent(Y,X).% X is child of Y
+mother(X,Y) :- parent(X,Y), female(x).% X is mother of Y if X is parent of Y and X is female
+father(X,Y) :- parent(X,Y), male(x).
+grandparent(X,Y) :- parent(X,Z), parent(Z,Y). % X is grandparent of Y if X is parent of Z and Z is parent of Y
+ancestor(X,Z) :- parent(X,Z).% X is ancestor of Z if X is parent of Z
+ancestor(X,Z) :- parent(X,Y), ancestor(Y,Z).% X is ancestor of Z if X is parent of Z or X is the parnet of an ancestor of Z
+
+
+p(1,1).
+p(1,2).
+p(2,1).
+p(2,2).
+p(2,3).
+p(3,1).
+p(3,3).
+
+edge(p(1,1),p(2,2)).
+edge(p(1,2),p(2,2)).
+edge(p(3,1),p(2,1)).
+edge(p(2,2),p(3,1)).
+edge(p(2,2),p(2,3)).
+edge(p(2,3),p(3,3)).
+
+
+dpath(p(X,Y), p(A,B)) :- edge(p(X,Y), p(A,B)).% dpath istnieje je¿eli jest krawedz bezposrednio pomiedzy punktami
+dpath(p(X,Y), p(A,B)) :- edge(p(X,Y), p(C,D)), dpath(p(C,D), p(A,B)).% dpath istnieje jezejli jest krawedz pomiedzy punktami(X,Y)i(A,B) lub jesli istnieje krawedz pomiedzy (X,Y)i(C,D)

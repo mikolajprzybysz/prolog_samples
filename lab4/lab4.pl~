@@ -1,0 +1,50 @@
+member(Head,[Head|Tail]).
+member(X,[Head|Tail]):-member(X,Tail).
+%ie member(a,[a,b,c]).
+
+%concatenating -concat(L1,L2,L3)
+%true if L3 is the list obtained by concatenating L1 and L2
+concat([],L2,L2).
+concat([Head|Tail],L2,[Head|L3]) :- concat(Tail,L2,L3).
+% concat([a,b,c],X,[a,b,c,d]).
+
+
+%delete(X,L,L1) is true if
+%L1 is the list L after one occurence of the element X has been deleted
+delete(Head,[Head|Tail],Tail).
+delete(X,[Y|Tail],[Y|L1]) :- delete(X,Tail,L1).
+%delete(a,[a,b,c,d,a,b],X).
+
+%reverse([],[]).
+%reverse([Head|Tail],L2) :- reverse(Tail,L1), concat(L1,[Head],L2).
+
+reverse2([Head|Tail],Accumulator,L3) :- reverse2(Tail,[Head|Accumulator],L3).
+reverse2([],Accumulator,Accumulator).
+%reverse2([a,b,c],[d,e],Y).
+
+sorted([]).
+sorted([X]).
+sorted([X,Y|Tail]) :- order(X,Y), sorted([Y|Tail]).
+permutation([],[]).
+permutation([Head|Tail],L) :- permutation(Tail,L1),delete(Head,L,L1).
+naivesort(L1,L2) :- permutation(L1,L2), sorted(L2).
+
+sum1([], X) :- write('Nie istnieje').
+sum1([X], X).
+sum1([H|T], N) :- sum1(T, M), N is M+H.
+
+rlen([], 0).
+rlen([[H|T]|Z], N) :- rlen(Z, M),rlen(T, U), W is M+1, N is U+W.
+rlen([H|T], N) :- rlen(T, M), N is M+1.
+len([], 0).
+len([H|T], N) :- len(T, M), N is M+1.
+avg2(X, N) :- len(X, K), sum1(X, Z), N is Z/K.
+count2(X, [], 0).
+count2(X, [X|T], N) :- count2(X, T, M), N is M+1.
+count2(X, [H|T], N) :- count2(X, T, N).
+double2([X], [X|[X]]).
+double2([H|T], [H|[H|Z]]) :- double2(T, Z).
+repeatp(X, 0, Y, Y).
+repeatp(X, N, Y, [X|Z]) :- repeatp(X, M, Y, Z), N is M+1.
+repeat2([H], Y, N) :- repeatp(H, N, [], Y).
+repeat2([H|T], Y, N) :- repeatp(H, N, Z, Y), repeat2(T, Z, N).
